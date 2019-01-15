@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 Frabic module
 """
@@ -16,4 +17,4 @@ def do_pack():
         local(cmd, capture=True)
         return filepath
     except:
-        return
+        return None
