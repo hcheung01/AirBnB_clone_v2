@@ -3,7 +3,6 @@ Frabic module
 """
 from fabric.api import *
 from datetime import datetime
-from os import path
 
 
 def do_pack():
