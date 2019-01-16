@@ -26,7 +26,7 @@ def do_pack():
 def do_deploy(archive_path):
     """deploy tar package to remote server"""
 
-    if os.path.isfile(achive_path) and not os.path.exists(archive_path):
+    if not os.path.isfile(achive_path) and not os.path.exists(archive_path):
         return False
 
     put(archive_path, "/tmp")
