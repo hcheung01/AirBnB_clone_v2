@@ -8,6 +8,7 @@ import os
 env.hosts = ["35.243.155.238", "34.73.31.23"]
 env.user = ['ubuntu']
 
+
 def do_pack():
     """pack directory tar format to another directory"""
 
@@ -20,6 +21,7 @@ def do_pack():
         return filepath
     except:
         return None
+
 
 def do_deploy(archive_path):
     """deploy tar package to remote server"""
