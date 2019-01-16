@@ -7,7 +7,7 @@ from datetime import datetime
 import os
 env.hosts = ["35.243.155.238", "34.73.31.23"]
 env.user = 'ubuntu'
-
+env.key_filename = '~/.ssh/holberton'
 
 def do_pack():
     """pack directory tar format to another directory"""
@@ -26,7 +26,7 @@ def do_pack():
 def do_deploy(archive_path):
     """deploy tar package to remote server"""
 
-    if not achive_path or not os.path.exists(archive_path):
+    if os.path.isfile(achive_path) and not os.path.exists(archive_path):
         return False
 
     put(archive_path, "/tmp")
@@ -46,3 +46,4 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+    return True
