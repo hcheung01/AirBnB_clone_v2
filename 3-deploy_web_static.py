@@ -48,3 +48,13 @@ def do_deploy(archive_path):
     except:
         return False
     return True
+
+
+def deploy():
+    """deploy all"""
+
+    archive_path = do_pack()
+    if not os.path.isfile(archive_path) and not os.path.exists(archive_path):
+        return False
+
+    return do_deploy(archive_path)
