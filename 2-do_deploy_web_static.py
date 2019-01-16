@@ -5,10 +5,8 @@ Frabic module
 from fabric.api import *
 from datetime import datetime
 import os
-#env.hosts = ["35.243.155.238", "34.73.31.23"]
-#env.user = ['ubuntu']
-env.host = ["34.206.234.184"]
-env.user = ['root']
+env.hosts = ["35.243.155.238", "34.73.31.23"]
+env.user = ['ubuntu']
 
 def do_pack():
     """pack directory tar format to another directory"""
@@ -42,7 +40,7 @@ def do_deploy(archive_path):
         run('rm -rf {}webstatic'.format(to_here))
         run('rm -rf /data/web_static/current')
         run('ln -s {} /data/web_static/current'.format(to_here))
-        print('DEPLOYED')
+        print('New version deployed!')
         return True
     except:
         return False
