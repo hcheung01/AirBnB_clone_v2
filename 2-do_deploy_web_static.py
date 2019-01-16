@@ -27,11 +27,10 @@ def do_pack():
 def do_deploy(archive_path):
     """deploy tar package to remote server"""
 
-    if not os.path.isfile(archive_path) and not os.path.exists(archive_path):
+    if not os.path.exists(archive_path) and not os.path.isfile(archive_path):
         return False
-
-    put(archive_path, "/tmp")
     try:
+        put(archive_path, "/tmp")
         fileonly = os.path.basename(archive_path)
         filename = os.path.splitext(fileonly)[0]
         run("mkdir -p /data/web_static/releases/{}/".format(filename))
