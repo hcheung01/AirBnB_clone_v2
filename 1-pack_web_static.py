@@ -18,11 +18,3 @@ def do_pack():
         return filepath
     except:
         return None
-
-@hosts('ubuntu')
-do_deploy(archive_path):
-
-
-        with cd("/tmp/"):
-            upload = put(archive_path)
-        return upload.succeeded
