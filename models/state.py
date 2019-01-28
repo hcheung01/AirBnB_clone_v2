@@ -15,11 +15,8 @@ class State(BaseModel, Base):
     """
 
     __tablename__ = "states"
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", passive_deletes=True, backref="state")
-    else:
-        name = ""
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", passive_deletes=True, backref="state")
 
     @property
     def cities(self):

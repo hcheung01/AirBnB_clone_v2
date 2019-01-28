@@ -33,41 +33,38 @@ class Place(BaseModel, Base):
     """
 
     __tablename__ = 'places'
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'places'
-        city_id = Column(String(60),
-                         ForeignKey('cities.id', ondelete='cascade'),
-                         nullable=False)
-        user_id = Column(String(60),
-                         ForeignKey('users.id', ondelete='cascade'),
-                         nullable=False)
-        name = Column(String(128), nullable=False)
-        description = Column(String(1024), nullable=True)
-        number_rooms = Column(Integer, nullable=False, default=0)
-        number_bathrooms = Column(Integer, nullable=False, default=0)
-        max_guest = Column(Integer, nullable=False, default=0)
-        price_by_night = Column(Integer, nullable=False, default=0)
-        latitude = Column(Float, nullable=True)
-        longitude = Column(Float, nullable=True)
-        reviews = relationship('Review',
-                               cascade='delete', backref='place')
-        amenities = relationship('Amenity', secondary=place_amenity,
-                                 viewonly=False)
-    else:
-        @property
-        def reviews(self):
-            """getter attribute"""
-            objs = models.storage.all(models.Review)
-            return [v for v in objs.values() if self.id == v.place_id]
+    city_id = Column(String(60),
+                     ForeignKey('cities.id', ondelete='cascade'),
+                     nullable=False)
+    user_id = Column(String(60),
+                     ForeignKey('users.id', ondelete='cascade'),
+                     nullable=False)
+    name = Column(String(128), nullable=False)
+    description = Column(String(1024), nullable=True)
+    number_rooms = Column(Integer, nullable=False, default=0)
+    number_bathrooms = Column(Integer, nullable=False, default=0)
+    max_guest = Column(Integer, nullable=False, default=0)
+    price_by_night = Column(Integer, nullable=False, default=0)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    reviews = relationship('Review',
+                           cascade='delete', backref='place')
+    amenities = relationship('Amenity', secondary=place_amenity,
+                             viewonly=False)
+    @property
+    def reviews(self):
+        """getter attribute"""
+        objs = models.storage.all(models.Review)
+        return [v for v in objs.values() if self.id == v.place_id]
 
-        @property
-        def amenities(self):
-            """getter attribute"""
-            objs = models.storage.all('Amenity')
-            return [amen for amen in objs.values() if amen.id in amenity_ids]
+    @property
+    def amenities(self):
+        """getter attribute"""
+        objs = models.storage.all('Amenity')
+        return [amen for amen in objs.values() if amen.id in amenity_ids]
 
-        @amenities.setter
-        def amenities(self, obj):
-            if isinstance(obj, Amenity):
-                if self.id == obj.place_id:
-                    self.amenity_ids.append(obj.id)
+    @amenities.setter
+    def amenities(self, obj):
+        if isinstance(obj, Amenity):
+            if self.id == obj.place_id:
+                self.amenity_ids.append(obj.id)

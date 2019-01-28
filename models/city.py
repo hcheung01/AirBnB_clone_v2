@@ -14,13 +14,9 @@ class City(BaseModel, Base):
         name: input name
     """
 
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'cities'
-        name = Column(String(128), nullable=False)
-        state_id = Column(String(60),
+    __tablename__ = 'cities'
+    name = Column(String(128), nullable=False)
+    state_id = Column(String(60),
                           ForeignKey("states.id", ondelete='cascade'),
                           nullable=False)
-        places = relationship("Place", cascade='delete', backref="cities")
-    else:
-        state_id = ""
-        name = ""
+    places = relationship("Place", cascade='delete', backref="cities")

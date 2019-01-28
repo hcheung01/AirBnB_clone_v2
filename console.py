@@ -123,9 +123,10 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, line):
         """Prints all string representation of all instances
         Exceptions:
-            NameError: when there is no object taht has the name
+            NameError: when there is no object that has the name
         """
-        objects = storage.all(eval(line.strip()))
+
+        objects = storage.all()
         my_list = []
         if not line:
             for key in objects:
