@@ -8,19 +8,20 @@ from models import storage
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-#app.jinja_env.lstrip_blocks = True
-#app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
+app.jinja_env.trim_blocks = True
 
 
 @app.teardown_appcontext
-def close_db(error):
+def close(exception):
     """Closes the database again at the end of the request."""
     storage.close()
 
 
 @app.route('/states_list')
 def states():
-    state = storage.all('State').values()
+    """access File/DB Storage for all State objects and render to HTML"""
+    state = storage.all('State')
     return render_template('7-states_list.html', states=state)
 
 if __name__ == '__main__':
