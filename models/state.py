@@ -22,11 +22,6 @@ class State(BaseModel, Base):
 
         @property
         def cities(self):
-            my_cities = models.storage.all(models.classes['City']).values()
-            return [city for city in my_cities if city.state_id == self.id]
-
-            """return list of all objects in storage
-            return [v for k, v in models.storage.all(models.classes['City'])
-                    .items()
-                    if self.id == v.state_id]
-            """
+            """getter"""
+            all_cities = models.storage.all(models.classes['City']).values()
+            return [c for c in all_cities if c.state_id == self.id]
