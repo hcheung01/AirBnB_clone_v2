@@ -1,5 +1,7 @@
 *.json
 .flaskenv
+*.sql
+
 venv/
 
 *.pyc

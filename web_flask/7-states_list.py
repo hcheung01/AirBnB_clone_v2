@@ -5,10 +5,9 @@ web application to generate list of states dynamically
 from flask import Flask, render_template
 from models import storage
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 
 
-@app.route('/states_list')
+@app.route('/states_list', strict_slashes = False)
 def states():
     """access File/DB Storage for all State objects and render to HTML"""
     return render_template('7-states_list.html', storage=storage.all('State'))
