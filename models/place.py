@@ -53,7 +53,6 @@ class Place(BaseModel, Base):
         amenities = relationship('Amenity', secondary=place_amenity,
                                  viewonly=False)
 
-
     else:
         city_id = ''
         user_id = ''

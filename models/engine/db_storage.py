@@ -23,11 +23,11 @@ class DBStorage():
         """ initialization """
 
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
-                               os.getenv('HBNB_MYSQL_USER'),
-                               os.getenv('HBNB_MYSQL_PWD'),
-                               os.getenv('HBNB_MYSQL_HOST'),
-                               os.getenv('HBNB_MYSQL_DB')),
-                               pool_pre_ping=True)
+            os.getenv('HBNB_MYSQL_USER'),
+            os.getenv('HBNB_MYSQL_PWD'),
+            os.getenv('HBNB_MYSQL_HOST'),
+            os.getenv('HBNB_MYSQL_DB'),
+            pool_pre_ping=True))
 
         if os.getenv('HBNB_ENV') is 'test':
             Base.metadata.drop_all(bind=self.__engine)
@@ -37,12 +37,12 @@ class DBStorage():
 
         if cls is None:
             objs = [obj for my_class in
-                       [State, User, City, Place, Amenity, Review]
-                       for obj in self.__session.query(my_class).all()]
+                    [State, User, City, Place, Amenity, Review]
+                    for obj in self.__session.query(my_class).all()]
         else:
             objs = self.__session.query(eval(cls)).all()
-        return {'{}.{}'.format(obj.__class__.__name__, obj.id): obj for
-                obj in objs}
+            return {'{}.{}'.format(obj.__class__.__name__, obj.id): obj for
+                    obj in objs}
 
     def new(self, obj):
         """ insert new object in current database session """

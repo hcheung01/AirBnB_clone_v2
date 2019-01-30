@@ -14,15 +14,16 @@ else:
     class Base():
         pass
 
+
 class BaseModel():
-    """This class will defines all common attributes/methods
-    for other classes
-    """
+    """This class will defines all common attributes/methods"""
 
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), primary_key=True)
-        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        created_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False,
+                            default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiation of base model class
@@ -47,7 +48,7 @@ class BaseModel():
             self.created_at = datetime.now()
         if 'updated_at' in kwargs:
             kwargs["updated_at"] = datetime.strptime(kwargs["updated_at"],
-                                                    "%Y-%m-%dT%H:%M:%S.%f")
+                                                     "%Y-%m-%dT%H:%M:%S.%f")
         else:
             self.updated_at = datetime.now()
 
@@ -76,13 +77,13 @@ class BaseModel():
         Return:
             returns a dictionary of all the key values in __dict__
         """
-        my_dict = dict(self.__dict__)
-        my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        my_dict["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        if '_sa_instance_state' in my_dict.keys():
-            del my_dict['_sa_instance_state']
-        return my_dict
+        my_d = dict(self.__dict__)
+        my_d["__class__"] = str(type(self).__name__)
+        my_d["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        my_d["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        if '_sa_instance_state' in my_d.keys():
+            del my_d['_sa_instance_state']
+        return my_d
 
     def delete(self):
         """ delete the current instance from the storage (models.storage) """
