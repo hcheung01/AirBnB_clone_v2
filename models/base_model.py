@@ -7,17 +7,22 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 import os
 
-Base = declarative_base()
 
+if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+    Base = declarative_base()
+else:
+    class Base():
+        pass
 
-class BaseModel:
+class BaseModel():
     """This class will defines all common attributes/methods
     for other classes
     """
 
-    id = Column(String(60), primary_key=True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), primary_key=True)
+        created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+        updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instantiation of base model class
@@ -29,18 +34,22 @@ class BaseModel:
             created_at: creation date
             updated_at: updated date
         """
-        if kwargs:
-            for key, value in kwargs.items():
-                if key == "created_at" or key == "updated_at":
-                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                if key != "__class__":
-                    setattr(self, key, value)
-            if 'id' not in kwargs:
-                setattr(self, 'id', str(uuid.uuid4()))
+
+        for k, v in kwargs.items():
+            if "__class__" not in k:
+                setattr(self, k, v)
+        if id not in kwargs:
+            self.id = str(uuid.uuid4())
+        if 'created_at' in kwargs:
+            kwargs["created_at"] = datetime.strptime(kwargs["created_at"],
+                                                     "%Y-%m-%dT%H:%M:%S.%f")
         else:
-                self.id = str(uuid.uuid4())
-                self.created_at = self.updated_at = datetime.utcnow()
-                models.storage.new(self)
+            self.created_at = datetime.now()
+        if 'updated_at' in kwargs:
+            kwargs["updated_at"] = datetime.strptime(kwargs["updated_at"],
+                                                    "%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            self.updated_at = datetime.now()
 
     def __str__(self):
         """returns a string
@@ -69,8 +78,8 @@ class BaseModel:
         """
         my_dict = dict(self.__dict__)
         my_dict["__class__"] = str(type(self).__name__)
-        my_dict["created_at"] = self.created_at.isoformat()
-        my_dict["updated_at"] = self.updated_at.isoformat()
+        my_dict["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        my_dict["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         if '_sa_instance_state' in my_dict.keys():
             del my_dict['_sa_instance_state']
         return my_dict

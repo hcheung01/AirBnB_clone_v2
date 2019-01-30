@@ -52,11 +52,21 @@ class FileStorage:
     def reload(self):
         """serialize the file path to JSON file path
         """
+#        try:
+#            with open(self.__file_path, 'r', encoding="UTF-8") as f:
+                #for key, value in (json.load(f)).items():
+                #    value = eval(value["__class__"])(**value)
+                #    self.__objects[key] = value
+       # except FileNotFoundError:
+        #    pass
+
         try:
-            with open(self.__file_path, 'r', encoding="UTF-8") as f:
-                for key, value in (json.load(f)).items():
-                    value = eval(value["__class__"])(**value)
-                    self.__objects[key] = value
+            with open(FileStorage.__file_path, encoding="UTF8") as fd:
+                FileStorage.__objects = json.load(fd)
+            for key, val in FileStorage.__objects.items():
+                class_name = val["__class__"]
+                class_name = models.classes[class_name]
+                FileStorage.__objects[key] = class_name(**val)
         except FileNotFoundError:
             pass
 
@@ -67,3 +77,7 @@ class FileStorage:
             self.save()
         else:
             return
+
+    def close(self):
+        """deserialize the JSON file to objects"""
+        self.reload()
