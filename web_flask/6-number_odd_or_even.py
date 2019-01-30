@@ -49,7 +49,7 @@ def number_template(n):
 @app.route('/number_odd_or_even/<int:n>')
 def number_odd_or_even(n):
     """Output: odd or even number plus string in H1 tag of Body"""
-    return render_template('6-number.html', n=n)
+    return render_template('6-number_odd_or_even.html', n=n)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
