@@ -13,7 +13,7 @@ def states():
     """access File/DB Storage for all State objects and render to HTML"""
 
     obj = storage.all('State')
-    states = states = [v for k, v in obj.items()]
+    states = {v.id: v.name for k, v in obj.items()}
     return render_template('7-states_list.html', storage=states)
 
 
