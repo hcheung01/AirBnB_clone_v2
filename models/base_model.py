@@ -36,21 +36,21 @@ class BaseModel():
             updated_at: updated date
         """
 
-        for k, v in kwargs.items():
-            if "__class__" not in k:
-                setattr(self, k, v)
         if id not in kwargs:
             self.id = str(uuid.uuid4())
-        if 'created_at' in kwargs:
+        if 'created_at' not in kwargs:
+            self.created_at = datetime.now()
+        else:
             kwargs["created_at"] = datetime.strptime(kwargs["created_at"],
                                                      "%Y-%m-%dT%H:%M:%S.%f")
+        if 'updated_at' not in kwargs:
+            self.updated_at = datetime.now()
         else:
-            self.created_at = datetime.now()
-        if 'updated_at' in kwargs:
             kwargs["updated_at"] = datetime.strptime(kwargs["updated_at"],
                                                      "%Y-%m-%dT%H:%M:%S.%f")
-        else:
-            self.updated_at = datetime.now()
+        for key, val in kwargs.items():
+            if "__class__" not in key:
+                setattr(self, key, val)
 
     def __str__(self):
         """returns a string
@@ -77,13 +77,13 @@ class BaseModel():
         Return:
             returns a dictionary of all the key values in __dict__
         """
-        my_d = dict(self.__dict__)
-        my_d["__class__"] = str(type(self).__name__)
-        my_d["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        my_d["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        if '_sa_instance_state' in my_d.keys():
-            del my_d['_sa_instance_state']
-        return my_d
+        my_dict = dict(self.__dict__)
+        my_dict["__class__"] = str(type(self).__name__)
+        my_dict["created_at"] = self.created_at.isoformat()
+        my_dict["updated_at"] = self.updated_at.isoformat()
+        if '_sa_instance_state' in my_dict.keys():
+            del my_dict['_sa_instance_state']
+        return my_dict
 
     def delete(self):
         """ delete the current instance from the storage (models.storage) """

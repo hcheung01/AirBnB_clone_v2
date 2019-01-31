@@ -12,42 +12,35 @@ from models.review import Review
 
 
 class FileStorage:
-    """This class serializes instances to a JSON file and
-    deserializes JSON file to instances
-    Attributes:
-        __file_path: path to the JSON file
-        __objects: objects will be stored
+    """Serializes instances to JSON file and deserializes back to instances
     """
+
     __file_path = "file.json"
     __objects = {}
 
     def all(self, cls=None):
         """returns a dictionary
-        Return:
-            returns a dictionary of __object
         """
         if cls is None:
             return self.__objects
-        else:
-            return {k: v for k, v in self.__objects.items() if type(v) == cls}
+        return {k: v for k, v in self.__objects.items() if type(v) == cls}
 
     def new(self, obj):
         """sets __object to given obj
         Args:
             obj: given object
         """
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            self.__objects[key] = obj
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """serialize the file path to JSON file path
         """
-        my_dict = {}
-        for key, value in self.__objects.items():
-            my_dict[key] = value.to_dict()
-        with open(self.__file_path, 'w', encoding="UTF-8") as f:
-            json.dump(my_dict, f)
+        objs_dict = {}
+        for key, value in FileStorage.__objects.items():
+            objs_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, 'w') as fd:
+            json.dump(objs_dict, fd)
 
     def reload(self):
         """serialize the file path to JSON file path
@@ -63,9 +56,11 @@ class FileStorage:
             pass
 
     def delete(self, obj=None):
-        """ deletes object in __objects """
+        """ deletes object in __objects
+        """
         if obj:
-            self.__objects.pop(obj.__class__.__name__ + "." + obj.id, None)
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
+            self.__objects.pop(key)
             self.save()
         else:
             return
