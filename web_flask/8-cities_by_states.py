@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.teardown_appcontext
-def teardown_db(exception):
+def teardown_db(Exception):
     """Closes the database again at the end of the request."""
     storage.close()
 
@@ -24,4 +24,4 @@ def states():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
+    app.run(host='0.0.0.0')
