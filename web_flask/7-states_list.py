@@ -14,7 +14,7 @@ def states():
 
     obj = storage.all('State')
     states = {v.id: v.name for k, v in obj.items()}
-    return render_template('7-states_list.html', storage=states)
+    return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
