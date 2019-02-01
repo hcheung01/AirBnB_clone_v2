@@ -29,20 +29,25 @@ class DBStorage():
             os.getenv('HBNB_MYSQL_DB'),
             pool_pre_ping=True))
 
-        if os.getenv('HBNB_ENV') is 'test':
+        if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         """ get dictionary of all objects"""
 
-        if cls is None:
-            objs = [obj for my_class in
-                    [State, User, City, Place, Amenity, Review]
-                    for obj in self.__session.query(my_class).all()]
+        dicts = {}
+        if cls:
+            if type(cls) == str:
+                results = self.__session.query(eval(cls)).all()
+            else:
+                results = self.__session.query(cls).all()
         else:
-            objs = self.__session.query(eval(cls)).all()
-            return {'{}.{}'.format(obj.__class__.__name__, obj.id): obj for
-                    obj in objs}
+            test = ['State', 'City', 'User', 'Place']
+            results = [self.__session.query(obj) for obj in test]
+        for obj in results:
+            key = '{}.{}'.format(obj.__class__.__name__, obj.id)
+            dicts[key] = obj
+        return dicts
 
     def new(self, obj):
         """ insert new object in current database session """
