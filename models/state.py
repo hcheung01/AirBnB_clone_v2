@@ -23,5 +23,5 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """getter"""
-            all_cities = models.storage.all(models.classes['City']).values()
-            return [c for c in all_cities if c.state_id == self.id]
+            all_cities = models.storage.all(models.City)
+            return [c for c in all_cities.values() if c.state_id == self.id]

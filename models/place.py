@@ -52,7 +52,6 @@ class Place(BaseModel, Base):
                                cascade='delete', backref='place')
         amenities = relationship('Amenity', secondary=place_amenity,
                                  viewonly=False)
-
     else:
         city_id = ''
         user_id = ''
@@ -69,20 +68,18 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             """getter attribute"""
-            objs = models.storage.all(models.Review)
-            return [v for v in objs.values() if self.id == v.place_id]
+            return [review for review in models.storage.all(Review).values()
+                    if self.id == review.place_id]
 
         @property
         def amenities(self):
             """getter attribute
-            objs = models.storage.all('Amenity')
-            return [amen for amen in objs.values()
-                        if amen.id in self.amenity_ids]
             """
-            return amenity_ids
+            return [amenity for amenity in models.storage.all(Amenity).values()
+                    if amenity.id in self.amenity_ids]
 
         @amenities.setter
         def amenities(self, obj):
             """setter method"""
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj.id)
+            if obj and isinstance(obj, Amenity):
+                type(self).amenity_ids.append(obj.id)
