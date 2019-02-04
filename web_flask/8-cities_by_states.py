@@ -5,14 +5,14 @@ from models import storage
 
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
 
-@app.route('/states_list', strict_slashes=False)
-def states():
-    """access File/DB Storage for all State objects and render to HTML"""
-    states = {obj.id: obj.name for obj in storage.all('State').values()}
-
-    return render_template('7-states_list.html', states=states)
+@app.route('/cities_by_states')
+def cities_by_states():
+    """list cities per related state"""
+    return render_template('8-cities_by_states.html',
+                           states=[c for c in storage.all('State').values()])
 
 
 @app.teardown_appcontext
