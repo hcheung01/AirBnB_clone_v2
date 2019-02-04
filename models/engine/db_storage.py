@@ -59,16 +59,20 @@ class DBStorage():
     def delete(self, obj=None):
         """ delete from current database session """
 
-        if obj:
-            self.__session.delete(obj)
-            self.save()
+        if obj is not None:
+            all_instances = self.__session.query(obj.__class__.__name__).all()
+            for instance in all_instances:
+                if obj == instance:
+                    self.__session.delete(obj)
+                    self.save()
 
     def reload(self):
         """ reload database """
 
         Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        self.__session = scoped_session(session_factory)
 
     def close(self):
         """close session"""
